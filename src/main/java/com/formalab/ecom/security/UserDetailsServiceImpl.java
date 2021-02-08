@@ -32,7 +32,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (user == null) throw new UsernameNotFoundException(username) ;
 
 		Collection<GrantedAuthority>  authorities = new ArrayList<>();
-	
+			authorities.add(new SimpleGrantedAuthority("ADMIN")) ;
+			authorities.add(new SimpleGrantedAuthority("client")) ;
 		return new User(user.getEmail(),user.getPassword(),authorities);
 	}
 

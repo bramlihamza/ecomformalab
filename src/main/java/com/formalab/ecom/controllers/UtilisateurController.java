@@ -19,7 +19,7 @@ import com.formalab.ecom.services.UtilisateurService;
 public class UtilisateurController {
 @Autowired
 UtilisateurService utilisateurService ; 
-	@PostMapping(path = "utilisateur" ) 
+	@PostMapping(path = "/registre" ) 
 	public Utilisateur saveUtilisateur (@RequestBody Utilisateur utilisateur){
 		return utilisateurService.saveJwt(utilisateur) ; 	
 	}

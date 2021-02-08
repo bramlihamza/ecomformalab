@@ -15,18 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	
-	
-    //liste des ressources swagger � autoriser
-    private static final String[] AUTH_WHITELIST = {
-
-            // -- swagger ui
-            "/swagger-resources/**",
-            "/swagger-ui.html",
-            "/v2/api-docs",
-            "/webjars/**"
-    };
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -46,19 +34,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //http.formLogin();
         //activer spring securité
-        http.authorizeRequests().antMatchers("*").authenticated();
-        //j ai pas besoin de s'authentifier pour faire le register
+   
+        
+        //j ai pas besoin de s'authentifier pour faire le login
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/login/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST,"/files/**").permitAll();
+      //j ai pas besoin de s'authentifier pour faire le login
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/registre/**").permitAll();
+        //http.authorizeRequests().antMatchers(HttpMethod.POST,"/files/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/login").permitAll();
         //	http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").permitAll();
-        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
+       
+     	//http.authorizeRequests().antMatchers(HttpMethod.GET,"/utilisateur/**").hasAuthority("ADMIN");
+        //http.authorizeRequests().anyRequest().authenticated();
         
-      
-        http
-        .authorizeRequests()
-            .antMatchers( "/favicon.ico").permitAll();
-        //	http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("ADMIN");
+        
+
+   
         //http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
         http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

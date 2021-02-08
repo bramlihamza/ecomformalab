@@ -62,6 +62,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .claim("roles", springuser.getAuthorities())
                 .compact();
 //        response.addHeader("Access-Control-Allow-Origin", "*");
+        System.out.println(springuser.getAuthorities().toString());
         response.getWriter().append( "{" +
         		'"' +"Authorization"+'"' +":" 
         		+ '"' + SecurityConstants.TOKEN_PREFIX +   jwt +'"'+ "," +

@@ -1,6 +1,7 @@
 package com.formalab.ecom.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.formalab.ecom.entites.Commande;
@@ -61,18 +63,41 @@ public class CommandeController {
 		}
 		
 		@PostMapping(path = "produit/{idproduit}/utilisateur/{idUtilisateur}" )
-		public void saveCommandeProduits (@PathVariable Long idUtilisateur , @PathVariable Long idproduit, 
+		public void saveCommandeProduits ( @PathVariable Long idUtilisateur , @PathVariable Long idproduit, 
 				@RequestBody Commande commande){
+			
 			Produit produit = produitService.getOne(idproduit);
 			Utilisateur utilisateur = utilisateurService.getOne(idUtilisateur);
 			commande.setUtilisateur(utilisateur);
-			commande.getListProDuit().add(produit);
+			commande.getListProduit().add(produit);
 			commandeService.save(commande) ;
-			produit.setCommande(commande);
+			produit.getCommandes().add(commande);
 			produitService.save(produit);
 			utilisateur.getCommandes().add(commande);
 			utilisateurService.save(utilisateur);
 			
 		}
 		
+		@PostMapping(path = "utilisateur/{idUtilisateur}" )
+		public void saveCommandeProduitsAll ( @PathVariable Long idUtilisateur ,
+				@RequestParam Long [] idp, 
+				@RequestBody Commande commande){
+			
+			Utilisateur utilisateur = utilisateurService.getOne(idUtilisateur);
+			commande.setUtilisateur(utilisateur);
+			
+			for (int i = 0; i < idp.length; i++) {
+				System.out.println(idp[i]);
+				Produit produit = produitService.getOne(idp[i]);
+				commande.getListProduit().add(produit);
+			}
+			
+			commandeService.save(commande) ;
+			
+			
+			//Produit produit = produitService.getOne(idproduit);
+			utilisateur.getCommandes().add(commande);
+			utilisateurService.save(utilisateur);
+			
+		}
 }

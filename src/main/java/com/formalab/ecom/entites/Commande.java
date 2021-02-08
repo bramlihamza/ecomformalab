@@ -8,8 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 
 
@@ -29,8 +30,10 @@ public class Commande {
 	@ManyToOne @JoinColumn(name = "utilisateur" )
 	private Utilisateur utilisateur ; 
 	
-	
-	@OneToMany (targetEntity = Produit.class , mappedBy = "commande")
+	@ManyToMany
+    @JoinTable( name = "T_Produits_Commandes",
+                joinColumns = @JoinColumn( name = "idCommande" ),
+                inverseJoinColumns = @JoinColumn( name = "idProduit" ) )
 	private List<Produit> listProduit = new ArrayList<>() ;
 
 	public Long getId() {
@@ -57,15 +60,17 @@ public class Commande {
 		this.utilisateur = utilisateur;
 	}
 
-	public List<Produit> getListProDuit() {
+	
+
+	
+
+	public List<Produit> getListProduit() {
 		return listProduit;
 	}
 
 	public void setListProduit(List<Produit> listProduit) {
 		this.listProduit = listProduit;
 	}
-
-	
 
 	public String getDescription() {
 		return description;
@@ -83,12 +88,11 @@ public class Commande {
 		this.prix = prix;
 	}
 
-	public List<Produit> getListProduit() {
-		return listProduit;
-	}
+	
 
 	
 	
+
 	public Commande(Long id, String libele, String description, float prix, Utilisateur utilisateur,
 			List<Produit> listProduit) {
 		super();
@@ -110,6 +114,8 @@ public class Commande {
 		return "Commande [id=" + id + ", libele=" + libele + ", description=" + description + ", prix=" + prix
 				+ ", utilisateur=" + utilisateur + ", listProduit=" + listProduit + "]";
 	}
+
+
 
 	
 	

@@ -1,10 +1,15 @@
 package com.formalab.ecom.entites;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 
@@ -25,8 +30,13 @@ public class Produit {
 	private Categorie categorie ;
 	
 	@JsonBackReference
-	@ManyToOne @JoinColumn(name = "idProduit")
-	private Commande  commande ; 
+	//@ManyToOne @JoinColumn(name = "idProduit")
+	
+	@ManyToMany
+    @JoinTable( name = "T_Produits_Commandes",
+    joinColumns = @JoinColumn( name = "idProduit" ),
+    inverseJoinColumns = @JoinColumn( name = "idCommande" ) )
+	private List<Commande>  commandes = new ArrayList<>() ; 
 
 	public Long getId() {
 		return id;
@@ -60,16 +70,18 @@ public class Produit {
 		this.categorie = categorie;
 	}
 
-	public Commande getCommande() {
-		return commande;
-	}
-
-	public void setCommande(Commande commande) {
-		this.commande = commande;
-	}
+	
 
 	
 	
+
+	public List<Commande> getCommandes() {
+		return commandes;
+	}
+
+	public void setCommandes(List<Commande> commandes) {
+		this.commandes = commandes;
+	}
 
 	public float getPrix() {
 		return prix;
@@ -89,8 +101,10 @@ public class Produit {
 	@Override
 	public String toString() {
 		return "Produit [id=" + id + ", nom=" + nom + ", libele=" + libele + ", prix=" + prix + ", categorie="
-				+ categorie + ", commande=" + commande + "]";
+				+ categorie + ", commandes=" + commandes + "]";
 	}
+
+	
 
 	
 
